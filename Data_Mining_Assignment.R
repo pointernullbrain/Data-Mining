@@ -29,5 +29,5 @@ ggplot(premise, aes(x = fct_infreq(state))) +
   labs(title = "Premise Count by State", x = "State", y = "Count")
 
 #test
-a <- 1+1
+a <- 1+4
 a
