@@ -27,3 +27,7 @@ ggplot(premise, aes(x = fct_infreq(state))) +
   coord_flip() +
   theme_minimal() +
   labs(title = "Premise Count by State", x = "State", y = "Count")
+
+#test
+a <- 1+1
+a
