@@ -1,8 +1,12 @@
+# Load library
 install.packages("arrow")
+
 library(arrow)
 library(dplyr)
 library(ggplot2)
 library(tidyverse)
+
+# Read files
 item <- read_parquet("https://storage.data.gov.my/pricecatcher/lookup_item.parquet")
 records <- read_parquet("https://storage.data.gov.my/pricecatcher/pricecatcher_2025-01.parquet")
 premise <- read_parquet("https://storage.data.gov.my/pricecatcher/lookup_premise.parquet")
