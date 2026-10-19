@@ -35,7 +35,7 @@ df_merged <- records %>%
 df_reduced <- df_merged%>%filter(date == "2025-01-01", 
                                  state == "Selangor")
 # Date format (dd/mm/yy)
-df_reduced$date <- format(df_reduced$date, "%d/%m/%Y")
+df_reduced$date <- format(df_reduced$date, "%d/%m/%Y") 
 #-------------------------------------------
 # Data cleaning
 # Remove duplicates (if any)
