@@ -8,6 +8,7 @@ library(arrow)
 library(dplyr)
 library(ggplot2)
 library(tidyverse)
+library(lubridate)
 
 # Read files
 item <- read_parquet("https://storage.data.gov.my/pricecatcher/lookup_item.parquet")
@@ -33,7 +34,8 @@ df_merged <- records %>%
 # Data filter (date / & state)
 df_reduced <- df_merged%>%filter(date == "2025-01-01", 
                                  state == "Selangor")
-
+# Date format (dd/mm/yy)
+df_reduced$date <- format(df_reduced$date, "%d/%m/%Y")
 #-------------------------------------------
 # Data cleaning
 # Remove duplicates (if any)
