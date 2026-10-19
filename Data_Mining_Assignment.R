@@ -31,8 +31,8 @@ df_merged <- records %>%
   left_join(premise, by = "premise_code")
 
 # Data filter (date / & state)
-df_reduced <- df_merged%>%filter(date == "2025-01-01")#, 
-                                 #state == "Selangor")
+df_reduced <- df_merged%>%filter(date == "2025-01-01", 
+                                 state == "Selangor")
 
 #-------------------------------------------
 # Data cleaning
@@ -52,5 +52,25 @@ sum(is.na(df_clean))
 colSums(is.na(df_clean))
 
 #-------------------------------------------
-boxplot(df_clean$price)
+# Outliers treatment (BEFORE)
+par(mfrow = c(1,2))
+hist(df_clean$price, main = "Price Distribution (BEFORE)")
+boxplot(df_clean$price, main = "Price Boxplot (BEFORE)")
 summary(df_clean)
+
+# IQR grouped by item_code
+df_clean_iqr <- df_clean %>%
+  group_by(item_code) %>%
+  mutate(
+    Q1 = quantile(price, 0.25, na.rm = TRUE),
+    Q3 = quantile(price, 0.75, na.rm = TRUE),
+    IQR = Q3 - Q1,
+    lower_bound = Q1 - (1.5 * IQR), 
+    upper_bound = Q3 + (1.5 * IQR)
+  ) %>%
+  filter(price >= lower_bound & price <= upper_bound) %>%
+  ungroup()
+
+hist(df_clean_iqr$price, main = "Price Distribution (AFTER IQR)")
+boxplot(df_clean_iqr$price, main = "Price Boxplot (AFTER IQR)")
+
