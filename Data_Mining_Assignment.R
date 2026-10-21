@@ -2,7 +2,7 @@
 
 #-------------------------------------------
 # Load library
-install.packages("arrow")
+#install.packages("arrow")
 
 library(arrow)
 library(dplyr)
@@ -45,11 +45,17 @@ sum(is.na(df_reduced))
 colSums(is.na(df_reduced))
 
 df_clean <- na.omit(df_reduced)
+df_clean_selective <- df_reduced %>% drop_na(item_group)
 
 # Check again duplicates and missing values
 sum(duplicated(df_clean))
 sum(is.na(df_clean))
 colSums(is.na(df_clean))
+
+# Check for duplicates and missing values for second method to handle missing values
+sum(duplicated(df_clean_selective))
+sum(is.na(df_clean_selective))
+colSums(is.na(df_clean_selective))
 
 #-------------------------------------------
 # Outliers treatment (BEFORE)
@@ -73,5 +79,35 @@ df_clean_iqr <- df_clean %>%
 
 hist(df_clean_iqr$price, main = "Price Distribution (AFTER IQR)")
 boxplot(df_clean_iqr$price, main = "Price Boxplot (AFTER IQR)")
+
+#create factors for item group and item category
+distinct(df_clean$item_group)
+df_clean <- df_clean %>% 
+  mutate(item_group_factor = as.factor(item_group)) %>%
+  mutate(item_category_factor = as.factor(item_category))
+summary(df_clean$item_group_factor)
+
+## checking validity
+par(mfrow = c(1,1))
+plot(df_clean$item_group_factor)  
+levels(df_clean$item_group_factor)
+
+#log transform
+ggplot(df_clean, aes(x = item_group_factor, y = price, fill = item_group_factor)) +
+  geom_boxplot(outlier.size = 1, outlier.alpha = 0.5) +
+  scale_y_log10(labels = scales::dollar_format(prefix = "RM ")) + # Converts y-axis to log scale
+  labs(
+    title = "Log-Transformed Price Distribution by Item Group",
+    x = "Item Group",
+    y = "Price (MYR - Log10 Scale)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1), # Rotates long text labels
+    legend.position = "none"
+  )
+
+
+
 
 
