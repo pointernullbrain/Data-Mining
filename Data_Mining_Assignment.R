@@ -137,9 +137,6 @@ ggplot(df_clean, aes(x = item_group_factor, y = price, fill = item_group_factor)
     legend.position = "none"
   )
 
-
-
-
 #-------------------------------------
 # Median
 df_clean_median <- df_clean %>%
