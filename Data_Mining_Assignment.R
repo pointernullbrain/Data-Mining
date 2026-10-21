@@ -2,8 +2,6 @@
  
 #-------------------------------------------
 # Load library
-#install.packages("arrow")
-
 library(arrow)
 library(dplyr)
 library(ggplot2)
