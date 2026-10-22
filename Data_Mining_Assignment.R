@@ -150,3 +150,9 @@ df_clean_median <- df_clean %>%
 
 plotingHist(df_clean_median, "AFTER Median")
 plotingBox(df_clean_median, "AFTER Median")
+
+summary(df_clean_iqr)
+summary(df_clean_median)
+summary(df_clean_selective)
+
+#write.csv(df_clean)
