@@ -94,7 +94,7 @@ plotingHist(df_clean, "BEFORE")
 plotingBox(df_clean,"BEFORE")
 
 #-------------------------------------
-#log transform
+#log transform boxplot
 ggplot(df_clean, aes(x = item_group_factor, y = price, fill = item_group_factor)) +
   geom_boxplot(outlier.size = 1, outlier.alpha = 0.5) +
   scale_y_log10(labels = scales::dollar_format(prefix = "RM ")) + # Converts y-axis to log scale
@@ -107,6 +107,23 @@ ggplot(df_clean, aes(x = item_group_factor, y = price, fill = item_group_factor)
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1), # Rotates long text labels
     legend.position = "none"
+  )
+
+#log transform histogram
+ggplot(df_clean, aes(x = price, fill = item_group_factor)) +
+  geom_histogram(bins = 30, color = "black", alpha = 0.7) +
+  scale_x_log10(labels = scales::dollar_format(prefix = "RM ")) +
+  facet_wrap(~ item_group_factor, scales = "free_y") +
+  labs(
+    title = "Price Distribution Histogram by Item Group",
+    x = "Price (MYR - Log10 Scale)",
+    y = "Frequency / Count"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    strip.text = element_text(face = "bold", size = 9),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5)
   )
 
 #-------------------------------------
