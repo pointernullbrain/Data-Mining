@@ -1,5 +1,5 @@
 # STQD6414 Data Mining - Assignment 1
- 
+
 #-------------------------------------------
 # Load library
 library(arrow)
@@ -108,8 +108,8 @@ df_clean_iqr <- df_clean %>%
 plotingHist(df_clean_iqr, "AFTER IQR")
 plotingBox(df_clean_iqr, "AFTER IQR")
 
+#-------------------------------------
 #create factors for item group and item category
-distinct(df_clean$item_group)
 df_clean <- df_clean %>% 
   mutate(item_group_factor = as.factor(item_group)) %>%
   mutate(item_category_factor = as.factor(item_category))
@@ -151,8 +151,21 @@ df_clean_median <- df_clean %>%
 plotingHist(df_clean_median, "AFTER Median")
 plotingBox(df_clean_median, "AFTER Median")
 
+#------------------------------------
+# Summary
 summary(df_clean_iqr)
 summary(df_clean_median)
 summary(df_clean_selective)
 
-#write.csv(df_clean)
+#------------------------------------
+# Pipeline Summary
+cat("\n ***** Pipeline Summary ***** \n",
+    "Filtered Rows (Selangor, 1/1/2025: ", nrow(df_reduced), "\n",
+    "Rows After Missing Value Removal: ", nrow(df_clean), "\n",
+    "Rows After IQR: ", nrow(df_clean_iqr), "\n",
+    "Rows After Median: ", nrow(df_clean_median), "\n" )
+
+# Export cleaned dataset
+df_final <- df_clean_median
+write.csv(df_final, "final_cleaned_pricecatcher_selangor.csv",
+          row.names = FALSE)
