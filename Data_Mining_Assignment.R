@@ -33,7 +33,7 @@ df_reduced <- df_merged%>%filter(date == "2025-01-01",
                                  state == "Selangor")
 
 # Change df_clean$item_group from character to factor
-df_reduced$item_group <- as.factor(df_reduced$item_group)
+df_reduced$item_group_factor <- as.factor(df_reduced$item_group)
 
 # Change date format
 df_reduced$date <- format(df_reduced$date, "%d/%m/%Y")
@@ -61,6 +61,7 @@ colSums(is.na(df_clean))
 sum(duplicated(df_clean_selective))
 sum(is.na(df_clean_selective))
 colSums(is.na(df_clean_selective))
+
 
 #-------------------------------------------
 # Plotting function
@@ -93,17 +94,6 @@ plotingHist(df_clean, "BEFORE")
 plotingBox(df_clean,"BEFORE")
 
 #-------------------------------------
-#create factors for item group and item category
-df_clean <- df_clean %>% 
-  mutate(item_group_factor = as.factor(item_group)) %>%
-  mutate(item_category_factor = as.factor(item_category))
-summary(df_clean$item_group_factor)
-
-## checking validity
-par(mfrow = c(1,1))
-plot(df_clean$item_group_factor)  
-levels(df_clean$item_group_factor)
-
 #log transform
 ggplot(df_clean, aes(x = item_group_factor, y = price, fill = item_group_factor)) +
   geom_boxplot(outlier.size = 1, outlier.alpha = 0.5) +
@@ -154,6 +144,7 @@ plotingBox(df_clean_median, "AFTER Median")
 
 #------------------------------------
 # Summary
+summary(df_clean)
 summary(df_clean_iqr)
 summary(df_clean_median)
 summary(df_clean_selective)
@@ -161,7 +152,8 @@ summary(df_clean_selective)
 #------------------------------------
 # Pipeline Summary
 cat("\n ***** Pipeline Summary ***** \n",
-    "Filtered Rows (Selangor, 1/1/2025: ", nrow(df_reduced), "\n",
+    "Filtered Rows (Selangor, 1/1/2025): ",nrow(df_reduced), "\n",
+    "Number of Rows Removed by Filtering: ", nrow(df_merged)-nrow(df_reduced), "\n",
     "Rows After Missing Value Removal: ", nrow(df_clean), "\n",
     "Rows After IQR: ", nrow(df_clean_iqr), "\n",
     "Rows After Median: ", nrow(df_clean_median), "\n" )
