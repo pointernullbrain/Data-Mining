@@ -92,22 +92,6 @@ plotingBox <- function(data, title) {
 plotingHist(df_clean, "BEFORE")
 plotingBox(df_clean,"BEFORE")
 
-# IQR grouped by item_code
-df_clean_iqr <- df_clean %>%
-  group_by(item_code, item_group) %>%
-  mutate(
-    Q1 = quantile(price, 0.25, na.rm = TRUE),
-    Q3 = quantile(price, 0.75, na.rm = TRUE),
-    IQR = Q3 - Q1,
-    lower_bound = Q1 - (1.5 * IQR), 
-    upper_bound = Q3 + (1.5 * IQR)
-  ) %>%
-  filter(price >= lower_bound & price <= upper_bound) %>%
-  ungroup()
-
-plotingHist(df_clean_iqr, "AFTER IQR")
-plotingBox(df_clean_iqr, "AFTER IQR")
-
 #-------------------------------------
 #create factors for item group and item category
 df_clean <- df_clean %>% 
@@ -136,6 +120,23 @@ ggplot(df_clean, aes(x = item_group_factor, y = price, fill = item_group_factor)
   )
 
 #-------------------------------------
+# IQR grouped by item_code
+df_clean_iqr <- df_clean %>%
+  group_by(item_code, item_group) %>%
+  mutate(
+    Q1 = quantile(price, 0.25, na.rm = TRUE),
+    Q3 = quantile(price, 0.75, na.rm = TRUE),
+    IQR = Q3 - Q1,
+    lower_bound = Q1 - (1.5 * IQR), 
+    upper_bound = Q3 + (1.5 * IQR)
+  ) %>%
+  filter(price >= lower_bound & price <= upper_bound) %>%
+  ungroup()
+
+plotingHist(df_clean_iqr, "AFTER IQR")
+plotingBox(df_clean_iqr, "AFTER IQR")
+
+#------------------------------------------
 # Median
 df_clean_median <- df_clean %>%
   group_by(item_group) %>%
